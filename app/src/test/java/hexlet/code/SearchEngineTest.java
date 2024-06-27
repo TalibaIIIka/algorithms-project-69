@@ -2,6 +2,7 @@ package hexlet.code;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,12 @@ class SearchEngineTest {
 
         List<String> result = SearchEngine.search(docs, "shoot");
 
-        assertThat(result).hasSameElementsAs(List.of("doc1", "doc2"));
+        assertThat(List.of("doc1", "doc2")).hasSameElementsAs(result);
+    }
+
+    @Test
+    void testSearchEmptyDocs() {
+        List<String> result = SearchEngine.search(new ArrayList<>(), "shoot");
+        assertThat(List.of()).hasSameElementsAs(result);
     }
 }
