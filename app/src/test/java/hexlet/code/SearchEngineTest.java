@@ -31,4 +31,17 @@ class SearchEngineTest {
         List<String> result = SearchEngine.search(new ArrayList<>(), "shoot");
         assertThat(List.of()).hasSameElementsAs(result);
     }
+
+    @Test
+    void testSearchPunctuation() {
+        var doc1 = "I can't shoot straight unless I've had a pint!";
+
+        List<Map<String, String>> docs = List.of(Map.of("id", "doc1", "text", doc1));
+
+        List<String> result1 = SearchEngine.search(docs, "pint");
+        assertThat(List.of("doc1")).hasSameElementsAs(result1);
+
+        List<String> result2 = SearchEngine.search(docs, "pint!");
+        assertThat(List.of("doc1")).hasSameElementsAs(result2);
+    }
 }
