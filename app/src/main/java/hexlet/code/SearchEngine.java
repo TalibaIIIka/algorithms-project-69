@@ -1,6 +1,5 @@
 package hexlet.code;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.MatchResult;
@@ -13,9 +12,9 @@ public class SearchEngine {
     private SearchEngine() {}
 
     public static List<String> search(List<Map<String, String>> docs, String shoot) {
-        var searchedDocs = new ArrayList<String>();
         var cleanedShootPattern = Pattern.compile("\\b" + cleanText(shoot) + "\\b");
-        var result = docs.stream()
+
+        return docs.stream()
             .flatMap(doc -> Map.of(
                     doc.get("id"), cleanedShootPattern.matcher(cleanText(doc.get("text"))).results().count()
             ).entrySet().stream())
@@ -23,8 +22,6 @@ public class SearchEngine {
             .filter(entry -> entry.getValue() > 0)
             .map(Map.Entry::getKey)
             .toList();
-
-        return result;
     }
 
     private static String cleanText(String text) {
