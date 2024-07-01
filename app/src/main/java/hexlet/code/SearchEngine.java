@@ -15,13 +15,16 @@ public class SearchEngine {
     public static List<String> search(List<Map<String, String>> docs, String shoot) {
         var searchedDocs = new ArrayList<String>();
         var cleanedShootPattern = Pattern.compile("\\b" + cleanText(shoot) + "\\b");
-        docs.forEach(doc -> {
-            var cleanedTextDoc = cleanText(doc.get("text"));
-            if (cleanedShootPattern.matcher(cleanedTextDoc).find()) {
-                searchedDocs.add(doc.get("id"));
-            }
-        });
-        return searchedDocs;
+        var result = docs.stream()
+            .flatMap(doc -> Map.of(
+                    doc.get("id"), cleanedShootPattern.matcher(cleanText(doc.get("text"))).results().count()
+            ).entrySet().stream())
+            .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+            .filter(entry -> entry.getValue() > 0)
+            .map(Map.Entry::getKey)
+            .toList();
+
+        return result;
     }
 
     private static String cleanText(String text) {
